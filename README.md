@@ -33,4 +33,3 @@ npm start
 
 The app will automatically launch in your browser.
 
-I have to say for web scraping I prefer Beautifulsoup (Python) 🤣
