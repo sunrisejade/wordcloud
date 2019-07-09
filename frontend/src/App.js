@@ -1,46 +1,49 @@
 import React, { Component } from 'react'
-import axios from 'axios';
-import WordCloud from "react-d3-cloud";
+import { Provider } from 'react-redux'
+import {createStore} from 'redux';
+import InputForm from './components/InputForm';
+import GenerateCloud from './components/GenerateCloud';
+import reducer from './reducer';
 
 
+//UI 
+import 'antd/dist/antd.css';
+import { Layout} from 'antd';
+import { Row, Col } from 'antd';
+const { Header, Content, Footer} = Layout;
 
-// react-d3-cloud's data shape:
-// const data = [
-//   { text: 'Hey', value: 1000 },
-//   { text: 'lol', value: 200 },
-// ];
-// fontSizeMapper:use to adjust each element's size (px)
+
+const store=createStore(reducer)
 
 class App extends Component {
 
-  state = {
-    list: [ ]
-  }
- 
-  componentDidMount() {
-    axios.get(`http://localhost:5000/`)
-    .then(res => {
-      const data = res.data;
-      this.setState({ list:data });
-    })
- }
   render(){
     
-    const fontSizeMapper = word => Math.log2(word.value) * 40;
-    const rotate = word => word.value % 360;
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 style={{textAlign:'center'}}>Wordcloud</h1>
-        </header>       
-        <WordCloud
-          width={1000}
-          height={1000}
-          data={this.state.list}
-          fontSizeMapper={fontSizeMapper}
-          rotate={rotate}    
-        />
-      </div>
+      <Provider store={ store }>
+        <Layout>
+          <Header style={{ background: 'dark', padding: 0 }}>
+            <h1 style={{textAlign:'center',color:'white',fontSize:30}}>Wordcloud</h1>
+          </Header><br/>
+            <Content style={{background: '#fff',minHeight:'100vh',padding:20}}>
+              <Row style={{display:'flex', justifyContent: 'center'}}>
+                <Col span={24} style={{display:'flex', justifyContent: 'center',width:'70%',padding:20}}>
+                  <InputForm /> 
+                </Col>
+              </Row>
+              <Row style={{margin:20}}>
+                <Col span={24} style={{display:'flex', justifyContent: 'center'}}>
+                  <GenerateCloud/>
+                </Col>
+              </Row>       
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>
+                    Created by SunriseJade
+            </Footer>
+        </Layout>
+      </Provider>
+      
+      
     );
   }  
 }
