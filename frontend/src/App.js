@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import {createStore} from 'redux';
-import InputForm from './components/InputForm';
+import SearchBar from './components/SearchBar';
 import GenerateCloud from './components/GenerateCloud';
 import reducer from './reducer';
 
@@ -28,7 +28,7 @@ class App extends Component {
             <Content style={{background: '#fff',minHeight:'100vh',padding:20}}>
               <Row style={{display:'flex', justifyContent: 'center'}}>
                 <Col span={24} style={{display:'flex', justifyContent: 'center',width:'70%',padding:20}}>
-                  <InputForm /> 
+                  <SearchBar /> 
                 </Col>
               </Row>
               <Row style={{margin:20}}>
