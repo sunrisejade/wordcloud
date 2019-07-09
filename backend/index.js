@@ -55,8 +55,8 @@ function axiosGet(url){
             });
   
         const wordGotTrim = wordGot.filter(n => n != undefined);
+        
         const wf = new Freq(wordGotTrim.toString().split(' '));
-
         wf.set('string')
         // console.dir(wf.get('cool'))
         let words=wf.list()
