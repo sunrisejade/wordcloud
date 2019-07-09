@@ -1,8 +1,11 @@
 const express = require('express');
 const app = express();
-const Freq = require('wordfrequenter')
+const cors = require('cors');
+const bodyParser= require('body-parser');
 const axios=require('axios');
 const cheerio = require('cheerio');
+const Freq = require('wordfrequenter')
+
 
 
 // listen server
@@ -19,6 +22,9 @@ app.listen(5000,function(){
 //Access-Control-Max-Age：表明该响应的有效时间为 86400 秒，也就是 24 小时。在有效时间内，浏览器无须为同一请求再次发起预检请求。
 //Other：5000端口作为服务器端口需要进行跨域设置，允许该资源可以被任意外域访问，这样前端的3000端口访问时才能成功
 
+
+app.options('/', cors())
+
 app.all('*', function(req, res, next) {  
     res.header("Access-Control-Allow-Credentials","true")
     res.header("Access-Control-Allow-Origin", "*");  
@@ -28,22 +34,26 @@ app.all('*', function(req, res, next) {
     next();  
 });
 
+// Body Parser Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // 1.Use Axios and cheerio for web scraping
 // 2.Use wordfrequenter to split string and count words
 // 3.Create a words count list then format this list's shape based on react-d3-cloud's data shape  
 
-function axiosGet(){
-    return axios.get(`https://ca.indeed.com/job/full-stack-developer-73db070d2cd97fac`)
+function axiosGet(url){
+    return axios.get(url)
     .then(res => {
         const html = res.data;
         const $ = cheerio.load(html);
-
+        
         let wordGot = [];
             $('li,span,p,a').each(function(i,elm) {
               wordGot[i] = $(this).text().replace(/\s+/g," ")   
             });
-
+  
         const wordGotTrim = wordGot.filter(n => n != undefined);
         const wf = new Freq(wordGotTrim.toString().split(' '));
 
@@ -61,14 +71,15 @@ function axiosGet(){
     }).catch((err)=> console.error(err))
 }
 
-// 3.Send back list to front end
-app.get('/', function(req, res) {
-    axiosGet().then(list=> res.json(list))
+
+app.post('/', function(req, res) {
+  console.log('Receive url from client side success:', req.body.inputUrl)
+  let url=req.body.inputUrl
+  axiosGet(url).then(list=>res.json(list))
 });
 
 // split()：方法用于把一个字符串分割成字符串数组
 // str.replace(/\s+/g," ") 将字符间的多个空格替换成1个空格
-
 //  finalWordsArray = Object.keys(wordsMap).map(function (key) {
 //   return {
 //     name: key,
