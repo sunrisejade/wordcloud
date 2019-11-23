@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WordCloud</title>
+</head>
+
+<style>
+  #container{
+    width: 1000px;
+    margin: 100px auto;
+    border: 1px solid #ccc;
+  }
+</style>
+
+<body>
+    <div id="container" style="height: 400px;"></div>
+    <script src="./node_modules/js2wordcloud/dist/js2wordcloud.js"></script>
+    
+    <script>
+      function getnum(){
+        return parseInt(Math.random()*100)
+      }
+      var arr1 = new Array(100);
+      arr1[0] = ['减肥而附加费', 1]
+      arr1[1] = ['v 发表观后感', 11]
+      arr1[2] = ['我', 78]
+      arr1[3] = ['解决国家', 18]
+      arr1[4] = ['结构图然后 iu 越糊涂', 20]
+      arr1[5] = ['就斤斤计较', 30]
+      arr1[6] = ['的', 101]
+      arr1[7] = ['给她', 100]
+      arr1[8] = ['会议厅', 10]
+      arr1[9] = ['非日任何个人和 u 研讨会', 90]
+        
+      for(var i=10;i<arr1.length;i++){
+        var num = getnum()
+        arr1[i] = ['谈笑风生', num];
+      }
+        
+      var option = {
+            list: arr1,
+            color: 'random-dark',
+            ellipticity: 1,
+            minRotation: -1.57080,
+            maxRotation: -1.57080,
+            rotateRatio: .4,
+            fontSizeFactor: 5,      
+            maxFontSize: 60,                       
+            minFontSize: 20,
+            gridSize: 10,
+            cardioid: 'square'
+      }
+
+      var wc = new Js2WordCloud(document.getElementById('container'))
+      wc.setOption(option)
+     
+      window.onresize = function() {
+        wc.resize()
+      }
+    </script>
+</body>
+</html>
